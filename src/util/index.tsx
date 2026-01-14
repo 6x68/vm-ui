@@ -16,7 +16,8 @@ export interface IHostElementResult {
   dispose: () => void;
 }
 
-type Yes = HTMLIFrameElement & Window & { Element: Element & { prototype: Element; } };
+type Yes = HTMLIFrameElement &
+  Window & { Element: Element & { prototype: Element } };
 
 export function getHostElement(shadow = true): IHostElementResult {
   const id: string | undefined = shadow ? undefined : getUniqueId('vmui-');
