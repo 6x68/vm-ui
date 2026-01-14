@@ -6,7 +6,6 @@ export { themes, themeCss };
 export * from './movable';
 
 export interface IHostElementResult {
-  id: string;
   tag: string;
   shadow: boolean;
   host: HTMLElement;
@@ -17,15 +16,28 @@ export interface IHostElementResult {
   dispose: () => void;
 }
 
+type Yes = HTMLIFrameElement & Window & { Element: Element & { prototype: Element; } };
+
 export function getHostElement(shadow = true): IHostElementResult {
-  const id = getUniqueId('vmui-');
-  const host = m(h(id, { id })) as HTMLElement;
+  const id: string | undefined = shadow ? undefined : getUniqueId('vmui-');
+  let host: HTMLElement;
   let root: ShadowRoot | HTMLElement;
   if (shadow) {
-    root = host.attachShadow({ mode: 'open' });
+    // https://github.com/crackbob/ballcrack/blob/b5483be1e66c53be769bdf074cc07bace8a07b97/src/shadowWrapper.js#L6-L20
+    const iframe = document.createElement('iframe') as unknown as Yes;
+    document.body.appendChild(iframe);
+
+    const attachShadow = iframe.Element.prototype.attachShadow;
+    iframe.remove();
+
+    host = document.createElement('div');
+    root = attachShadow.apply(host, [{ mode: 'closed' }]);
+
+    const hostEl = document.createElement('div');
+    host.appendChild(hostEl);
   } else {
-    root = m(h(id, {})) as HTMLElement;
-    host.append(root);
+    root = m(h(id, { id })) as HTMLElement;
+    root.append(root);
   }
   const styles: HTMLStyleElement[] = [];
   const addStyle = (css: string) => {
@@ -41,7 +53,6 @@ export function getHostElement(shadow = true): IHostElementResult {
   };
   addStyle(baseCss);
   const result: IHostElementResult = {
-    id,
     tag: 'VM.getHostElement',
     shadow,
     host,
