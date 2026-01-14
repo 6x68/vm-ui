@@ -5,7 +5,6 @@
   "author": "Gerald <gera2ld@live.com>",
   "license": "ISC",
   "scripts": {
-    "prepare": "husky",
     "dev": "rollup -wc rollup.config.mjs",
     "ci": "run-s lint",
     "build": "run-s ci clean build:types build:js",
