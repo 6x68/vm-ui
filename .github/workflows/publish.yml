@@ -16,6 +16,6 @@ jobs:
         with:
           registry-url: "https://npm.pkg.github.com"
           scope: 6x68
-      - run: pnpm i && pnpm publish --no-git-checks
+      - run: bun i && bun publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
