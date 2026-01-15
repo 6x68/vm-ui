@@ -19,7 +19,7 @@ console.log(newVersion);
 pkg.version = newVersion;
 await Bun.write("package.json", JSON.stringify(pkg, null, 2));
 await $`git add package.json`;
+await $`git commit -m 'version: ${newVersion}'`;
 await $`git tag v${newVersion}`;
 await $`git push`;
 await $`git push --tags`;
-await $`git commit -m version: ${newVersion}`;
