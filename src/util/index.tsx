@@ -10,75 +10,47 @@ export interface IHostElementResult {
   tag: string;
   shadow: boolean;
   host: HTMLElement;
-  withRoot<T>(cb: (it: HTMLElement) => T): T;
-  addStyle(css: string): void;
-  show(): void;
-  hide(): void;
-  dispose(): void;
-}
-
-type HostEntry = {
   root: HTMLElement;
-  shadowRoot?: ShadowRoot;
-};
-
-export const host2ShadowMap = new WeakMap<HTMLElement, HostEntry>();
+  addStyle: (css: string) => void;
+  show: () => void;
+  hide: () => void;
+  dispose: () => void;
+}
 
 export function getHostElement(shadow = true): IHostElementResult {
   const id = getUniqueId('vmui-');
   const host = m(h(id, { id })) as HTMLElement;
-
   let root: HTMLElement;
-
   if (shadow) {
-    const shadowRoot = host.attachShadow({ mode: 'open' });
+    const shadowRoot = host.attachShadow({ mode: 'closed' });
 
     const el = document.createElement('div');
     el.id = id;
-    shadowRoot.appendChild(el);
+    el.appendChild(shadowRoot);
 
     root = el;
-    host2ShadowMap.set(host, { root: el, shadowRoot });
   } else {
     root = m(h(id, { id })) as HTMLElement;
-    host2ShadowMap.set(host, { root });
   }
-
   const styles: HTMLStyleElement[] = [];
   const addStyle = (css: string) => {
-    const entry = host2ShadowMap.get(host);
-    if (entry?.shadowRoot) {
-      const styleEl = document.createElement('style');
-      styleEl.textContent = css;
-      entry.shadowRoot.appendChild(styleEl);
-      styles.push(styleEl);
-    } else if (!shadow && typeof GM_addStyle === 'function') {
+    if (!shadow && typeof GM_addStyle === 'function') {
       styles.push(GM_addStyle(css.replace(/:host\b/g, `#${id} `)));
     } else {
-      const styleNode = m(<style>{css}</style>) as HTMLStyleElement;
-      root.append(styleNode);
-      styles.push(styleNode);
+      root.append(m(<style>{css}</style>));
     }
   };
-
   const dispose = () => {
-    root.remove();
-    host.remove();
+    root.parentNode.removeChild(root);
     styles.forEach((style) => style.remove());
-    host2ShadowMap.delete(host);
   };
-
   addStyle(baseCss);
-
   const result: IHostElementResult = {
     id,
     tag: 'VM.getHostElement',
     shadow,
     host,
-    withRoot(fn) {
-      const entry = host2ShadowMap.get(this.host ?? host);
-      return fn((entry && entry.root) ?? root);
-    },
+    root,
     addStyle,
     dispose,
     show() {

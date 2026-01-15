@@ -3,7 +3,7 @@
   "version": "0.9.6-1",
   "description": "Common UI for userscripts in Violentmonkey",
   "author": "6x68",
-  "license": "MIT",
+  "license": "ISC",
   "scripts": {
     "dev": "rollup -wc rollup.config.mjs",
     "ci": "bun run lint",

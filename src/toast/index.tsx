@@ -79,7 +79,7 @@ export function showToast(
       {content}
     </hostElem.id>,
   ) as HTMLElement;
-  hostElem.withRoot((it) => it.appendChild(body));
+  hostElem.root.appendChild(body);
   let { style } = options;
   if (typeof style === 'function') style = style(hostElem.id);
   addStyle([stylesheet, themeCss, style].filter(Boolean).join('\n'));
