@@ -34,7 +34,7 @@ export function getHostElement(shadow = true): IHostElementResult {
     iframe.remove();
 
     const holder = document.createElement('div');
-    root = attachShadow.apply(holder, { mode: 'open' });
+    root = attachShadow.apply(holder, [{ mode: 'open' }]);
     document.body.appendChild(holder);
     host = m(h(id, { id })) as HTMLElement;
     root.append(host);
