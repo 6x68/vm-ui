@@ -19,7 +19,8 @@ export interface IHostElementResult {
 
 export function getHostElement(shadow = true): IHostElementResult {
   const id: string = getUniqueId('vmui-');
-  let thing: ShadowRoot | HTMLElement;
+  let root: ShadowRoot | HTMLElement;
+  let host: HTMLElement;
   if (shadow) {
     // https://github.com/crackbob/ballcrack/blob/b5483be1e66c53be769bdf074cc07bace8a07b97/src/shadowWrapper.js#L6-L20
     const iframe = document.createElement('iframe');
@@ -32,24 +33,24 @@ export function getHostElement(shadow = true): IHostElementResult {
     ).Element.prototype.attachShadow;
     iframe.remove();
 
-    const host = document.createElement('div');
-    thing = attachShadow.apply(host, [{ mode: 'closed' }]);
-
-    host.appendChild(thing);
-    document.body.appendChild(host);
+    const holder = document.createElement('div');
+    root = attachShadow.apply(holder, { mode: 'open' });
+    document.body.appendChild(holder);
+    host = m(h(id, { id })) as HTMLElement;
+    root.append(host);
   } else {
-    thing = m(h(id, { id })) as HTMLElement;
+    root = m(h(id, { id })) as HTMLElement;
   }
   const styles: HTMLStyleElement[] = [];
   const addStyle = (css: string) => {
     if (!shadow && typeof GM_addStyle === 'function') {
       styles.push(GM_addStyle(css.replace(/:host\b/g, `#${id} `)));
     } else {
-      thing.append(m(<style>{css}</style>));
+      root.append(m(<style>{css}</style>));
     }
   };
   const dispose = () => {
-    thing.parentNode.removeChild(thing);
+    root.parentNode.removeChild(root);
     styles.forEach((style) => style.remove());
   };
   addStyle(baseCss);
@@ -57,8 +58,8 @@ export function getHostElement(shadow = true): IHostElementResult {
     id,
     tag: 'VM.getHostElement',
     shadow,
-    host: thing,
-    root: thing,
+    host,
+    root,
     addStyle,
     dispose,
     show() {
