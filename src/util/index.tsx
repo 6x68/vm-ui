@@ -9,8 +9,8 @@ export interface IHostElementResult {
   id?: string;
   tag: string;
   shadow: boolean;
-  host: ParentNode;
-  root: ShadowRoot | HTMLElement;
+  host: HTMLElement;
+  root: HTMLElement;
   addStyle: (css: string) => void;
   show: () => void;
   hide: () => void;
@@ -20,9 +20,15 @@ export interface IHostElementResult {
 export function getHostElement(shadow = true): IHostElementResult {
   const id = getUniqueId('vmui-');
   const host = m(h(id, { id })) as HTMLElement;
-  let root: ShadowRoot | HTMLElement;
+  let root: HTMLElement;
   if (shadow) {
-    root = host.attachShadow({ mode: 'closed' });
+    const shadowRoot = host.attachShadow({ mode: 'closed' });
+
+    const el = document.createElement("div");
+    el.id = id;
+    el.appendChild(shadowRoot);
+
+    root = el;
   } else {
     root = m(h(id, { id })) as HTMLElement;
   }
