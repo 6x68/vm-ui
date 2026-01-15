@@ -9,7 +9,7 @@ export interface IHostElementResult {
   id?: string;
   tag: string;
   shadow: boolean;
-  host: HTMLElement;
+  host: ParentNode;
   root: ShadowRoot | HTMLElement;
   addStyle: (css: string) => void;
   show: () => void;
@@ -18,9 +18,8 @@ export interface IHostElementResult {
 }
 
 export function getHostElement(shadow = true): IHostElementResult {
-  const id: string | undefined = shadow ? undefined : getUniqueId('vmui-');
-  let host: HTMLElement;
-  let root: ShadowRoot | HTMLElement;
+  const id: string = getUniqueId('vmui-');
+  let thing: ShadowRoot | HTMLElement;
   if (shadow) {
     // https://github.com/crackbob/ballcrack/blob/b5483be1e66c53be769bdf074cc07bace8a07b97/src/shadowWrapper.js#L6-L20
     const iframe = document.createElement('iframe');
@@ -33,23 +32,23 @@ export function getHostElement(shadow = true): IHostElementResult {
     ).Element.prototype.attachShadow;
     iframe.remove();
 
-    host = document.createElement('div');
-    root = attachShadow.apply(host, [{ mode: 'closed' }]);
+    thing = attachShadow.apply(document.body, [{ mode: 'closed' }]);
+    thing.appendChild(m(h(id, { id })));
 
-    host.appendChild(root);
+    document.body.appendChild(thing);
   } else {
-    host = m(h(id, { id })) as HTMLElement;
+    thing = m(h(id, { id })) as HTMLElement;
   }
   const styles: HTMLStyleElement[] = [];
   const addStyle = (css: string) => {
     if (!shadow && typeof GM_addStyle === 'function') {
       styles.push(GM_addStyle(css.replace(/:host\b/g, `#${id} `)));
     } else {
-      root.append(m(<style>{css}</style>));
+      thing.append(m(<style>{css}</style>));
     }
   };
   const dispose = () => {
-    host.remove();
+    thing.parentNode.removeChild(thing);
     styles.forEach((style) => style.remove());
   };
   addStyle(baseCss);
@@ -57,8 +56,8 @@ export function getHostElement(shadow = true): IHostElementResult {
     id,
     tag: 'VM.getHostElement',
     shadow,
-    host,
-    root,
+    host: thing,
+    root: thing,
     addStyle,
     dispose,
     show() {
