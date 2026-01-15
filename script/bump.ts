@@ -22,3 +22,4 @@ await $`git add package.json`;
 await $`git tag v${newVersion}`;
 await $`git push`;
 await $`git push --tags`;
+await $`git commit -m version: ${newVersion}`;
