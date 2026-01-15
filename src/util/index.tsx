@@ -17,19 +17,16 @@ export interface IHostElementResult {
   dispose: () => void;
 }
 
-type Yes = HTMLIFrameElement &
-  Window & { Element: Element & { prototype: Element } };
-
 export function getHostElement(shadow = true): IHostElementResult {
   const id: string | undefined = shadow ? undefined : getUniqueId('vmui-');
   let host: HTMLElement;
   let root: ShadowRoot | HTMLElement;
   if (shadow) {
     // https://github.com/crackbob/ballcrack/blob/b5483be1e66c53be769bdf074cc07bace8a07b97/src/shadowWrapper.js#L6-L20
-    const iframe = document.createElement('iframe') as unknown as Yes;
+    const iframe = document.createElement('iframe');
     document.body.appendChild(iframe);
 
-    const attachShadow = iframe.Element.prototype.attachShadow;
+    const attachShadow = (iframe.contentWindow as Window & { Element: Element & { prototype: Element } }).Element.prototype.attachShadow;
     iframe.remove();
 
     host = document.createElement('div');
