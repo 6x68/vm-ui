@@ -24,7 +24,7 @@ export function getHostElement(shadow = true): IHostElementResult {
   if (shadow) {
     const shadowRoot = host.attachShadow({ mode: 'closed' });
 
-    const el = document.createElement("div");
+    const el = document.createElement('div');
     el.id = id;
     el.appendChild(shadowRoot);
 
