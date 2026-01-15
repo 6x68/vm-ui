@@ -1,6 +1,6 @@
 {
   "name": "@6x68/ui",
-  "version": "0.9",
+  "version": "0.9.1",
   "description": "Common UI for userscripts in Violentmonkey",
   "author": "6x68",
   "license": "ISC",
@@ -14,7 +14,8 @@
     "clean": "del-cli dist types",
     "build:js": "rollup -c rollup.config.mjs",
     "build:types": "tsc",
-    "build:docs": "typedoc src/index.ts"
+    "build:docs": "typedoc src/index.ts",
+    "bump": "script/bump.ts"
   },
   "repository": "git://github.com/6x68/vm-ui.git",
   "publishConfig": {

@@ -1,0 +1,23 @@
+#!/usr/bin/env bun
+import pkg from "../package.json" with { type: "json" };
+import { $ } from "bun";
+import { parseArgs } from "node:util";
+
+const { values: args } = parseArgs({
+  args: process.args,
+  options: {
+    version: {
+      type: "string",
+      short: "v"
+    }
+  }
+});
+
+const newVersion = args.version.replace(/^v/, "");
+console.log(newVersion);
+
+pkg.version = newVersion;
+Bun.write("package.json", JSON.stringify(pkg, null, 2));
+await $`git tag v${newVersion}`;
+await $`git push --tags`;
+$`git push`;
