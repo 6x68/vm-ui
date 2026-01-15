@@ -19,5 +19,5 @@ console.log(newVersion);
 pkg.version = newVersion;
 Bun.write("package.json", JSON.stringify(pkg, null, 2));
 await $`git tag v${newVersion}`;
+await $`git push`;
 await $`git push --tags`;
-$`git push`;
