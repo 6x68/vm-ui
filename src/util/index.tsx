@@ -22,7 +22,7 @@ export function getHostElement(shadow = true): IHostElementResult {
   const host = m(h(id, { id })) as HTMLElement;
   let root: HTMLElement;
   if (shadow) {
-    const shadowRoot = host.attachShadow({ mode: 'closed' });
+    const shadowRoot = host.attachShadow({ mode: 'open' });
 
     const el = document.createElement('div');
     el.id = id;
