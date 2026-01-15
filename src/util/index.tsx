@@ -18,26 +18,11 @@ export interface IHostElementResult {
 }
 
 export function getHostElement(shadow = true): IHostElementResult {
-  const id: string = getUniqueId('vmui-');
+  const id = getUniqueId('vmui-');
+  const host = m(h(id, { id })) as HTMLElement;
   let root: ShadowRoot | HTMLElement;
-  let host: HTMLElement;
   if (shadow) {
-    // https://github.com/crackbob/ballcrack/blob/b5483be1e66c53be769bdf074cc07bace8a07b97/src/shadowWrapper.js#L6-L20
-    const iframe = document.createElement('iframe');
-    document.body.appendChild(iframe);
-
-    const attachShadow = (
-      iframe.contentWindow as Window & {
-        Element: Element & { prototype: Element };
-      }
-    ).Element.prototype.attachShadow;
-    iframe.remove();
-
-    const holder = document.createElement('div');
-    root = attachShadow.apply(holder, [{ mode: 'open' }]);
-    document.body.appendChild(holder);
-    host = m(h(id, { id })) as HTMLElement;
-    root.appendChild(host);
+    root = host.attachShadow({ mode: 'closed' });
   } else {
     root = m(h(id, { id })) as HTMLElement;
   }

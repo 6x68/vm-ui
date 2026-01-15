@@ -84,7 +84,7 @@ export function getPanel(options?: IPanelOptions): IPanelResult {
   let { style } = options;
   if (typeof style === 'function') style = style(hostElem.id);
   hostElem.addStyle([stylesheet, themeCss, style].filter(Boolean).join('\n'));
-  hostElem.root.append(wrapper);
+  hostElem.root.appendChild(wrapper);
   const clear = () => {
     while (body.firstChild) body.firstChild.remove();
   };
