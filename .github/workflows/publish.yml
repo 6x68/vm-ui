@@ -16,9 +16,8 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         env:
           BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          registries: "https://npm.pkg.github.com"
       - run: bun i
       - run: bun publish
         env:
+          BUN_CONFIG_REGISTRY: https://npm.pkg.github.com
           BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
