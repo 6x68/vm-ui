@@ -17,4 +17,4 @@ jobs:
           registries: "https://npm.pkg.github.com"
       - run: bun i && bun publish
         env:
-          BUN_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
