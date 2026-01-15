@@ -26,7 +26,11 @@ export function getHostElement(shadow = true): IHostElementResult {
     const iframe = document.createElement('iframe');
     document.body.appendChild(iframe);
 
-    const attachShadow = (iframe.contentWindow as Window & { Element: Element & { prototype: Element } }).Element.prototype.attachShadow;
+    const attachShadow = (
+      iframe.contentWindow as Window & {
+        Element: Element & { prototype: Element };
+      }
+    ).Element.prototype.attachShadow;
     iframe.remove();
 
     host = document.createElement('div');
