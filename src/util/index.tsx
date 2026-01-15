@@ -37,7 +37,7 @@ export function getHostElement(shadow = true): IHostElementResult {
     root = attachShadow.apply(holder, [{ mode: 'open' }]);
     document.body.appendChild(holder);
     host = m(h(id, { id })) as HTMLElement;
-    root.append(host);
+    root.appendChild(host);
   } else {
     root = m(h(id, { id })) as HTMLElement;
   }
