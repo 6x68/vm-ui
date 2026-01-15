@@ -22,13 +22,21 @@ export function getHostElement(shadow = true): IHostElementResult {
   const host = m(h(id, { id })) as HTMLElement;
   let root: HTMLElement;
   if (shadow) {
-    const shadowRoot = host.attachShadow({ mode: 'open' });
+    // https://github.com/crackbob/ballcrack/blob/b5483be1e66c53be769bdf074cc07bace8a07b97/src/shadowWrapper.js#L6-L20
+    const iframe = document.createElement('iframe');
+    document.body.appendChild(iframe);
 
-    const el = document.createElement('div');
-    el.id = id;
-    el.appendChild(shadowRoot);
+    const attachShadow = (
+      iframe.contentWindow as Window & {
+        Element: Element & { prototype: Element };
+      }
+    ).Element.prototype.attachShadow;
+    iframe.remove();
 
-    root = el;
+    const holder = document.createElement('div');
+    root = attachShadow.apply(holder, [{ mode: 'open' }]);
+    document.body.appendChild(holder);
+    root.appendChild(host);
   } else {
     root = m(h(id, { id })) as HTMLElement;
   }
