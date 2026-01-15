@@ -14,10 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-        env:
-          BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: bun i
       - run: bun publish
         env:
           BUN_CONFIG_REGISTRY: https://npm.pkg.github.com
           BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUN_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
