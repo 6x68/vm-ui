@@ -1,22 +1,49 @@
-name: Publish to npmjs
+name: Publish to GitHub Packages
 
 on:
   push:
     tags:
       - v*
   workflow_dispatch:
+    inputs:
+      release_name:
+        type: string
+        required: true
+      tag_name:
+        type: string
+        required: true
 
 jobs:
   build:
-    permissions:
-      packages: write
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: oven-sh/setup-bun@v2
-      - run: bun i
-      - run: bun publish
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build
+        run: bun run build
+
+      - name: Publish
+        run: bun publish
         env:
           BUN_CONFIG_REGISTRY: https://npm.pkg.github.com
-          BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BUN_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          name: ${{ github.event.inputs.release_name || github.ref_name }}
+          files: |
+            dist/index.js
+            dist/index.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
