@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+    paths:
+      - package.json
+      - src/**/*
 
 jobs:
   build:
@@ -11,23 +14,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: marceloprado/has-changed-path@v1
-        id: changed-src
-        with:
-          paths: package.json src
 
       - uses: oven-sh/setup-bun@v2
-        if: steps.changed-src.outputs.changed == 'true'
 
       - name: Install dependencies
         run: bun i
 
       - name: Build docs
-        if: steps.changed-src.outputs.changed == 'true'
         run: bun run build:docs
 
       - name: Deploy to GitHub Pages
-        if: steps.changed-src.outputs.changed == 'true'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
