@@ -17,8 +17,8 @@ const newVersion = args.version.replace(/^v/, "");
 console.log(newVersion);
 
 pkg.version = newVersion;
-await $`git add package.json`;
 await Bun.write("package.json", JSON.stringify(pkg, null, 2));
+await $`git add package.json`;
 await $`git tag v${newVersion}`;
 await $`git push`;
 await $`git push --tags`;
