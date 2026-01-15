@@ -36,11 +36,9 @@ export function getHostElement(shadow = true): IHostElementResult {
     host = document.createElement('div');
     root = attachShadow.apply(host, [{ mode: 'closed' }]);
 
-    const hostEl = document.createElement('div');
-    host.appendChild(hostEl);
+    host.appendChild(root);
   } else {
-    root = m(h(id, { id })) as HTMLElement;
-    root.append(root);
+    host = m(h(id, { id })) as HTMLElement;
   }
   const styles: HTMLStyleElement[] = [];
   const addStyle = (css: string) => {
