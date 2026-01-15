@@ -7,6 +7,8 @@ on:
 
 jobs:
   build:
+    permissions:
+      packages: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,6 +17,7 @@ jobs:
           BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           registries: "https://npm.pkg.github.com"
-      - run: bun i && bun publish
+      - run: bun i
+      - run: bun publish
         env:
           BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
