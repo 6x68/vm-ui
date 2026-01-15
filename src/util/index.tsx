@@ -6,6 +6,7 @@ export { themes, themeCss };
 export * from './movable';
 
 export interface IHostElementResult {
+  id?: string;
   tag: string;
   shadow: boolean;
   host: HTMLElement;
@@ -54,6 +55,7 @@ export function getHostElement(shadow = true): IHostElementResult {
   };
   addStyle(baseCss);
   const result: IHostElementResult = {
+    id,
     tag: 'VM.getHostElement',
     shadow,
     host,

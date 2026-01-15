@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "rollup -wc rollup.config.mjs",
     "ci": "bun run lint",
-    "build": "bun run ci clean build:types build:js",
+    "build": "bun run ci && bun run clean && bun run build:types && bun run build:js",
     "format": "prettier --ignore-path .eslintignore --write .",
     "lint": "prettier --ignore-path .eslintignore --check . && eslint --ext .ts,tsx src",
     "prepublishOnly": "bun run build",
@@ -16,10 +16,11 @@
     "build:types": "tsc",
     "build:docs": "typedoc src/index.ts"
   },
-  "repository": "git@github.com:violentmonkey/vm-ui.git",
+  "repository": "git://github.com/violentmonkey/vm-ui.git",
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://npm.pkg.github.com",
+    "provenance": true
   },
   "unpkg": "dist/index.js",
   "jsdelivr": "dist/index.js",

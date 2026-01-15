@@ -76,14 +76,10 @@ export function getPanel(options?: IPanelOptions): IPanelResult {
   };
   const hostElem = getHostElement(options.shadow);
   const body = m(
-    <hostElem.id
-      className={classNames([styles.body, themes[options.theme]])}
-    />,
+    <div className={classNames([styles.body, themes[options.theme]])} />,
   ) as HTMLElement;
   const wrapper = m(
-    <hostElem.id className={classNames([styles.panel, options.className])}>
-      {body}
-    </hostElem.id>,
+    <div className={classNames([styles.panel, options.className])}>{body}</div>,
   ) as HTMLElement;
   let { style } = options;
   if (typeof style === 'function') style = style(hostElem.id);

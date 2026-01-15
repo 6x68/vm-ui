@@ -14,8 +14,7 @@ jobs:
         env:
           BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          registry-url: "https://npm.pkg.github.com"
-          scope: 6x68
+          registries: "https://npm.pkg.github.com"
       - run: bun i && bun publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          BUN_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

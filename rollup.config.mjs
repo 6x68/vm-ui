@@ -1,6 +1,6 @@
 import { defineExternal, definePlugins } from '@gera2ld/plaid-rollup';
 import { defineConfig } from 'rollup';
-import pkg from './package.json' assert { type: 'json' };
+import pkg from './package.json' with { type: 'json' };
 
 const banner = `/*! ${pkg.name} v${pkg.version} | ${pkg.license} License */`;
 
