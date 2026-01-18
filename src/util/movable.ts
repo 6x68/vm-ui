@@ -6,16 +6,24 @@ export interface MovableOrigin {
 export interface MovableOptions {
   origin: MovableOrigin;
   onMoved?: () => void;
+  /**
+   *
+   * @param e
+   */
+  canDrag?(e: PointerEvent): boolean;
+  dragThreshold?: number;
 }
 
 export class Movable {
-  static defaultOptions: {
-    origin: MovableOrigin;
-  } = {
+  static defaultOptions: MovableOptions = {
     origin: { x: 'auto', y: 'auto' },
+    dragThreshold: 5
   };
 
-  private dragging: { x: number; y: number };
+  private pointerId: number | null = null;
+  private startPos?: { x: number; y: number };
+  private offset?: { x: number; y: number };
+  private dragging = false;
 
   private options: MovableOptions;
 
@@ -24,6 +32,7 @@ export class Movable {
     options?: Partial<MovableOptions>,
   ) {
     this.setOptions(options);
+    this.el.style.touchAction = "none";
   }
 
   setOptions(options: Partial<MovableOptions>) {
@@ -33,66 +42,71 @@ export class Movable {
     };
   }
 
-  onMouseDown = (e: MouseEvent) => {
+  private requirementsMet(e: PointerEvent): boolean {
+    return this.options.canDrag(e);
+  }
+
+  private onPointerDown = (e: PointerEvent) => {
+    if (!this.requirementsMet(e)) return;
+
+    this.pointerId = e.pointerId;
+    this.startPos = { x: e.clientX, y: e.clientY };
+
+    document.addEventListener("pointermove", this.onPointerMove);
+    document.addEventListener("pointerup", this.onPointerUp);
+    document.addEventListener("pointercancel", this.onPointerUp);
+  };
+
+  private onPointerMove = (e: PointerEvent) => {
+    if (e.pointerId !== this.pointerId || !this.startPos) return;
+
+    const dx = e.clientX - this.startPos.x;
+    const dy = e.clientY - this.startPos.y;
+
+    if (!this.dragging) {
+      if (Math.abs(dx) + Math.abs(dy) < this.options.dragThreshold) return;
+
+      this.dragging = true;
+
+      const rect = this.el.getBoundingClientRect();
+      this.offset = {
+        x: this.startPos.x - rect.left,
+        y: this.startPos.y - rect.top,
+      };
+
+      this.el.setPointerCapture(e.pointerId);
+    }
+
     e.preventDefault();
-    e.stopPropagation();
-    const { x, y } = this.el.getBoundingClientRect();
-    const { clientX, clientY } = e;
-    this.dragging = { x: clientX - x, y: clientY - y };
-    document.addEventListener('mousemove', this.onMouseMove);
-    document.addEventListener('mouseup', this.onMouseUp);
+
+    this.el.style.left = `${e.clientX - this.offset!.x}px`;
+    this.el.style.top = `${e.clientY - this.offset!.y}px`;
   };
 
-  onMouseMove = (e: MouseEvent) => {
-    if (!this.dragging) return;
-    const { x, y } = this.dragging;
-    const { clientX, clientY } = e;
-    const position = {
-      top: 'auto',
-      left: 'auto',
-      right: 'auto',
-      bottom: 'auto',
-    };
-    const { clientWidth, clientHeight } = document.documentElement;
-    const width = this.el.offsetWidth;
-    const height = this.el.offsetHeight;
-    const left = Math.min(clientWidth - width, Math.max(0, clientX - x));
-    const top = Math.min(clientHeight - height, Math.max(0, clientY - y));
-    const { origin } = this.options;
-    if (
-      origin.x === 'start' ||
-      (origin.x === 'auto' && left + left + width < clientWidth)
-    ) {
-      position.left = `${left}px`;
-    } else {
-      position.right = `${clientWidth - left - width}px`;
-    }
-    if (
-      origin.y === 'start' ||
-      (origin.y === 'auto' && top + top + height < clientHeight)
-    ) {
-      position.top = `${top}px`;
-    } else {
-      position.bottom = `${clientHeight - top - height}px`;
-    }
-    Object.assign(this.el.style, position);
-  };
+  private onPointerUp = (e: PointerEvent) => {
+    if (e.pointerId !== this.pointerId) return;
 
-  onMouseUp = () => {
-    this.dragging = null;
-    document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.onMouseUp);
-    this.options.onMoved?.();
+    if (this.dragging) {
+      this.el.releasePointerCapture(e.pointerId);
+    }
+
+    this.cleanup();
   };
 
   enable() {
-    this.el.addEventListener('mousedown', this.onMouseDown);
+    this.el.addEventListener("pointerdown", this.onPointerDown);
+  }
+
+  cleanup() {
+    document.removeEventListener("pointermove", this.onPointerMove);
+    document.removeEventListener("pointerup", this.onPointerUp);
+    document.removeEventListener("pointercancel", this.onPointerUp);
   }
 
   disable() {
     this.dragging = undefined;
-    this.el.removeEventListener('mousedown', this.onMouseDown);
-    document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.onMouseUp);
+    this.el.removeEventListener('mousedown', this.onPointerDown);
+    document.removeEventListener('mousemove', this.onPointerMove);
+    document.removeEventListener('mouseup', this.onPointerUp);
   }
 }
