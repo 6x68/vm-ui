@@ -17,7 +17,7 @@ export interface MovableOptions {
 export class Movable {
   static defaultOptions: MovableOptions = {
     origin: { x: 'auto', y: 'auto' },
-    dragThreshold: 5
+    dragThreshold: 5,
   };
 
   private pointerId: number | null = null;
@@ -32,7 +32,7 @@ export class Movable {
     options?: Partial<MovableOptions>,
   ) {
     this.setOptions(options);
-    this.el.style.touchAction = "none";
+    this.el.style.touchAction = 'none';
   }
 
   setOptions(options: Partial<MovableOptions>) {
@@ -52,9 +52,9 @@ export class Movable {
     this.pointerId = e.pointerId;
     this.startPos = { x: e.clientX, y: e.clientY };
 
-    document.addEventListener("pointermove", this.onPointerMove);
-    document.addEventListener("pointerup", this.onPointerUp);
-    document.addEventListener("pointercancel", this.onPointerUp);
+    document.addEventListener('pointermove', this.onPointerMove);
+    document.addEventListener('pointerup', this.onPointerUp);
+    document.addEventListener('pointercancel', this.onPointerUp);
   };
 
   private onPointerMove = (e: PointerEvent) => {
@@ -94,13 +94,13 @@ export class Movable {
   };
 
   enable() {
-    this.el.addEventListener("pointerdown", this.onPointerDown);
+    this.el.addEventListener('pointerdown', this.onPointerDown);
   }
 
   cleanup() {
-    document.removeEventListener("pointermove", this.onPointerMove);
-    document.removeEventListener("pointerup", this.onPointerUp);
-    document.removeEventListener("pointercancel", this.onPointerUp);
+    document.removeEventListener('pointermove', this.onPointerMove);
+    document.removeEventListener('pointerup', this.onPointerUp);
+    document.removeEventListener('pointercancel', this.onPointerUp);
   }
 
   disable() {
