@@ -1,6 +1,6 @@
 {
   "name": "@wq2/ui",
-  "version": "0.10.0-8-debug3",
+  "version": "0.10.0-8-debug4",
   "description": "Common UI for userscripts in Violentmonkey",
   "author": "6x68",
   "license": "MIT",
