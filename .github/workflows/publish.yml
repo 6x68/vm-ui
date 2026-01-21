@@ -34,7 +34,7 @@ jobs:
         run: bun run build
 
       - name: Publish (NPM)
-        run: bun publish
+        run: bunx npm publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
