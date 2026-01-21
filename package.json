@@ -17,7 +17,9 @@
     "build:docs": "typedoc src/index.ts",
     "bump": "script/bump.ts"
   },
-  "repository": "git://github.com/6x68/vm-ui.git",
+  "repository": {
+    "url": "git://github.com/6x68/vm-ui.git"
+  },
   "publishConfig": {
     "access": "public",
     "provenance": true
