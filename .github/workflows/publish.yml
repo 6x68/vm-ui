@@ -25,18 +25,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
-
-      - name: Install dependencies
-        run: bun install
-
-      - name: Build
-        run: bun run build
-
       - name: Setup Node (for npm publish)
         uses: actions/setup-node@v6
         with:
           node-version: '24'
+
+      - name: Install & Build
+        run: npm install && npm build
 
       - name: Publish (npm)
         run: npm publish --registry=https://registry.npmjs.org/ --loglevel info
