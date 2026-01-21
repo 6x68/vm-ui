@@ -17,6 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
+      id-token: write # Required for OIDC
       contents: write
       packages: write
 
@@ -31,10 +32,9 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Publish
+      - name: Publish (NPM)
         run: bun publish
         env:
-          BUN_CONFIG_REGISTRY: https://npm.pkg.github.com
           BUN_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub release
