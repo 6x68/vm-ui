@@ -34,8 +34,6 @@ jobs:
 
       - name: Publish (NPM)
         run: bun publish
-        env:
-          BUN_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2

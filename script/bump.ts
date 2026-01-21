@@ -4,13 +4,13 @@ import { $ } from "bun";
 import { parseArgs } from "node:util";
 
 const { values: args } = parseArgs({
-  args: process.args,
-  options: {
-    version: {
-      type: "string",
-      short: "v"
-    }
-  }
+	args: process.args,
+	options: {
+		version: {
+			type: "string",
+			short: "v",
+		},
+	},
 });
 
 const newVersion = args.version.replace(/^v/, "");

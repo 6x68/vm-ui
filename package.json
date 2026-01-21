@@ -20,7 +20,6 @@
   "repository": "git://github.com/6x68/vm-ui.git",
   "publishConfig": {
     "access": "public",
-    "registry": "https://npm.pkg.github.com",
     "provenance": true
   },
   "unpkg": "dist/index.js",
