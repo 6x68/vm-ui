@@ -15,6 +15,7 @@ on:
 
 jobs:
   build:
+    environment: a
     runs-on: ubuntu-latest
     permissions:
       id-token: write # Required for OIDC
