@@ -33,7 +33,7 @@ jobs:
         run: bun run build
 
       - name: Publish (NPM)
-        run: bun publish
+        run: bunx npm publish
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
