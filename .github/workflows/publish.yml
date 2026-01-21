@@ -34,9 +34,9 @@ jobs:
         run: bun run build
 
       - name: Publish (NPM)
-        run: bunx npm publish
+        run: bun publish
         env:
-          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUN_CONFIG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
