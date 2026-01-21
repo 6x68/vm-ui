@@ -1,4 +1,4 @@
-name: Publish to GitHub Packages
+name: Publish to NPM
 
 on:
   push:
@@ -34,7 +34,9 @@ jobs:
         run: bun run build
 
       - name: Publish (NPM)
-        run: bunx npm publish
+        run: bun publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
