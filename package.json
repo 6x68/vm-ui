@@ -1,46 +1,48 @@
 {
-  "name": "@wq2/ui",
-  "version": "0.10.2",
-  "description": "Common UI for userscripts in Violentmonkey",
-  "author": "6x68",
-  "license": "MIT",
-  "scripts": {
-    "dev": "rollup -wc rollup.config.mjs",
-    "ci": "bun run lint",
-    "build": "bun run ci && bun run clean && bun run build:types && bun run build:js",
-    "format": "prettier --ignore-path .eslintignore --write .",
-    "lint": "prettier --ignore-path .eslintignore --check . && eslint --ext .ts,tsx src",
-    "clean": "del-cli dist types",
-    "build:js": "rollup -c rollup.config.mjs",
-    "build:types": "tsc",
-    "build:docs": "typedoc src/index.ts",
-    "bump": "script/bump.ts"
-  },
-  "repository": {
-    "url": "git://github.com/6x68/vm-ui.git"
-  },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
-  },
-  "unpkg": "dist/index.js",
-  "jsdelivr": "dist/index.js",
-  "typings": "types/index.d.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "files": [
-    "dist",
-    "types"
-  ],
-  "devDependencies": {
-    "@babel/plugin-transform-react-jsx": "^7.28",
-    "@gera2ld/plaid": "~2.7.0",
-    "@gera2ld/plaid-rollup": "~2.7.0",
-    "del-cli": "^7.0",
-    "typedoc": "^0.28"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.28",
-    "@violentmonkey/dom": "^2.2.1"
-  }
+	"name": "@wq2/ui",
+	"version": "0.10.2",
+	"description": "Common UI for userscripts in Violentmonkey",
+	"author": "6x68",
+	"license": "MIT",
+	"scripts": {
+		"dev": "rollup -wc rollup.config.mjs",
+		"ci": "bun run lint",
+		"build": "bun run ci && bun run clean && bun run build:types && bun run build:js",
+		"format": "biome format --write",
+		"lint": "biome check",
+    "lint:fix": "biome check --fix",
+		"clean": "del-cli dist types",
+		"build:js": "rollup -c rollup.config.mjs",
+		"build:types": "tsc",
+		"build:docs": "typedoc src/index.ts",
+		"bump": "script/bump.ts"
+	},
+	"repository": {
+		"url": "git://github.com/6x68/vm-ui.git"
+	},
+	"publishConfig": {
+		"access": "public",
+		"provenance": true
+	},
+	"unpkg": "dist/index.js",
+	"jsdelivr": "dist/index.js",
+	"typings": "types/index.d.ts",
+	"main": "dist/index.js",
+	"module": "dist/index.mjs",
+	"files": [
+		"dist",
+		"types"
+	],
+	"devDependencies": {
+		"@babel/plugin-transform-react-jsx": "^7.28",
+		"@gera2ld/plaid": "~2.7.0",
+		"@gera2ld/plaid-rollup": "~2.7.0",
+		"del-cli": "^7.0",
+		"typedoc": "^0.28"
+	},
+	"dependencies": {
+		"@babel/runtime": "^7.28",
+		"@biomejs/biome": "^2.3.13",
+		"@violentmonkey/dom": "^2.2.1"
+	}
 }
