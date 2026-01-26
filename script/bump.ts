@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
-import pkg from "../package.json" with { type: "json" };
-import { $ } from "bun";
 import { parseArgs } from "node:util";
+import { $ } from "bun";
+import pkg from "../package.json" with { type: "json" };
 
 const { values: args } = parseArgs({
 	args: process.args,

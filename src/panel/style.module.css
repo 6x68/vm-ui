@@ -1,12 +1,12 @@
 .panel {
-  position: fixed;
-  z-index: 10000;
-  color: #333;
+	position: fixed;
+	z-index: 10000;
+	color: #333;
 }
 
 .body {
-  position: relative;
-  display: block;
-  padding: 8px;
-  word-break: break-word;
+	position: relative;
+	display: block;
+	padding: 8px;
+	word-break: break-word;
 }

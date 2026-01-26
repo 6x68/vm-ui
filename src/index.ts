@@ -1,12 +1,12 @@
 export const versions = Object.assign(
-  (typeof VM !== 'undefined' && VM?.versions) || {},
-  {
-    ui: 'process.env.VERSION',
-  },
+	(typeof VM !== "undefined" && VM?.versions) || {},
+	{
+		ui: "process.env.VERSION",
+	},
 );
 
-if (typeof VM === 'undefined' || VM?.versions?.dom?.split('.')[0] !== '2') {
-  throw new Error(`\
+if (typeof VM === "undefined" || VM?.versions?.dom?.split(".")[0] !== "2") {
+	throw new Error(`\
 [VM-UI] @violentmonkey/dom@2 is required
 Please include following code in your metadata:
 
@@ -15,6 +15,6 @@ Please include following code in your metadata:
 `);
 }
 
-export * from './util';
-export * from './toast';
-export * from './panel';
+export * from "./panel";
+export * from "./toast";
+export * from "./util";
