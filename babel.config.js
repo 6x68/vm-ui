@@ -1,5 +1,5 @@
 export default {
-	extends: import.meta.resolve("@gera2ld/plaid/config/babelrc-base"),
+	extends: `${import.meta.resolve("@gera2ld/plaid/config/babelrc-base")}.js`,
 	presets: ["@babel/preset-typescript"],
 	plugins: [
 		[
