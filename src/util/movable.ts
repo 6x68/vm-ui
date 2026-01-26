@@ -43,7 +43,7 @@ export class Movable {
   }
 
   private requirementsMet(e: PointerEvent): boolean {
-    return this.options.canDrag(e);
+    return this.options?.canDrag(e) ?? true;
   }
 
   private onPointerDown = (e: PointerEvent) => {
@@ -79,8 +79,10 @@ export class Movable {
 
     e.preventDefault();
 
-    this.el.style.left = `${e.clientX - this.offset!.x}px`;
-    this.el.style.top = `${e.clientY - this.offset!.y}px`;
+    if (!this.offset) return;
+
+    this.el.style.left = `${e.clientX - this.offset.x}px`;
+    this.el.style.top = `${e.clientY - this.offset.y}px`;
   };
 
   private onPointerUp = (e: PointerEvent) => {
