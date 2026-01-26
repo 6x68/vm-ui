@@ -10,7 +10,7 @@
 		"build": "bun run ci && bun run clean && bun run build:types && bun run build:js",
 		"format": "biome format --write",
 		"lint": "biome check",
-    "lint:fix": "biome check --fix",
+		"lint:fix": "biome check --fix",
 		"clean": "del-cli dist types",
 		"build:js": "rollup -c rollup.config.mjs",
 		"build:types": "tsc",
