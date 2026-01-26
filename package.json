@@ -10,7 +10,6 @@
 		"build": "bun run ci && bun run clean && bun run build:types && bun run build:js",
 		"format": "prettier --ignore-path .eslintignore --write .",
 		"lint": "prettier --ignore-path .eslintignore --check . && eslint --ext .ts,tsx src",
-		"prepublishOnly": "bun run build",
 		"clean": "del-cli dist types",
 		"build:js": "rollup -c rollup.config.mjs",
 		"build:types": "tsc",

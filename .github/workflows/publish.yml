@@ -14,7 +14,7 @@ on:
         required: true
 
 jobs:
-  build:
+  publish:
     environment: a
     runs-on: ubuntu-latest
     permissions:
@@ -31,10 +31,26 @@ jobs:
           node-version: '24'
 
       - name: Install & Build
-        run: npm install && npm build
+        run: npm install && npm run build
 
       - name: Publish (npm)
         run: npm publish --registry=https://registry.npmjs.org/ --loglevel info
+        env:
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ env.GITHUB_TOKEN }}
+
+      - name: Rename package for GitHub
+        uses: actions/github-script@v8
+        with:
+          script: |
+            import pkg from "./package.json" with { type: "json" };
+            import { writeFile } from "node:fs/promises";
+
+            pkg.name = "@6x68/vm-ui";
+            await writeFile("./package.json", JSON.stringify(pkg, null, 2));
+
+      - name: Publish (GitHub)
+        run: npm publish --registry=https://npm.pkg.github.com/ --loglevel info
         env:
           GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ env.GITHUB_TOKEN }}
