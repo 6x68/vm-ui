@@ -43,7 +43,7 @@ export class Movable {
 	}
 
 	private requirementsMet(e: PointerEvent): boolean {
-		return this.options?.canDrag(e) ?? true;
+		return this.options?.canDrag?.(e) ?? true;
 	}
 
 	private onPointerDown = (e: PointerEvent) => {
