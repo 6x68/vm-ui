@@ -15,12 +15,11 @@ on:
 
 jobs:
   publish:
-    environment: a
+    environment: publish
     runs-on: ubuntu-latest
     permissions:
       id-token: write # Required for OIDC
       contents: write
-      packages: write
 
     steps:
       - uses: actions/checkout@v4
@@ -40,16 +39,6 @@ jobs:
 
       - name: Publish (npm)
         run: bunx npm publish --registry=https://registry.npmjs.org/ --loglevel info
-        env:
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ env.GITHUB_TOKEN }}
-
-      - name: Rename package for GitHub
-        run: |
-            jq '.name = "@6x68/vm-ui"' package.json > /tmp/package.json && mv /tmp/package.json package.json
-
-      - name: Publish (GitHub)
-        run: bunx npm publish --registry=https://npm.pkg.github.com/ --loglevel info
         env:
           GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ env.GITHUB_TOKEN }}

@@ -1,0 +1,36 @@
+name: Publish to GitHub Packages
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+jobs:
+  publish:
+    environment: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build
+        run: bun run build
+
+      - name: Rename package for GitHub
+        run: |
+            jq '.name = "@6x68/vm-ui"' package.json > /tmp/package.json && mv /tmp/package.json package.json
+
+      - name: Publish (GitHub)
+        run: bunx npm publish --registry=https://npm.pkg.github.com/ --loglevel info
+        env:
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ env.GITHUB_TOKEN }}
