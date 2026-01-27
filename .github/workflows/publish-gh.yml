@@ -27,7 +27,7 @@ jobs:
 
       - name: Rename package for GitHub
         run: |
-            jq '.name = "@6x68/vm-ui"' package.json > /tmp/package.json && mv /tmp/package.json package.json
+            jq '.name = "@6x68/ui"' package.json > /tmp/package.json && mv /tmp/package.json package.json
 
       - name: Publish (GitHub)
         run: bun publish
