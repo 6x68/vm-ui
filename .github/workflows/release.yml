@@ -1,0 +1,43 @@
+name: Publish to NPM
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+    inputs:
+      release_name:
+        type: string
+        required: true
+      tag_name:
+        type: string
+        required: true
+
+jobs:
+  publish:
+    environment: publish
+    runs-on: ubuntu-latest
+    permissions:
+        contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build
+        run: bun run build
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
+          name: ${{ github.event.inputs.release_name || github.ref_name }}
+          files: |
+            dist/index.js
+            dist/index.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
