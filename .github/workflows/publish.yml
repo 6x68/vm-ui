@@ -45,14 +45,8 @@ jobs:
           NPM_TOKEN: ${{ env.GITHUB_TOKEN }}
 
       - name: Rename package for GitHub
-        uses: actions/github-script@v8
-        with:
-          script: |
-            import pkg from "./package.json" with { type: "json" };
-            import { writeFile } from "node:fs/promises";
-
-            pkg.name = "@6x68/vm-ui";
-            await writeFile("./package.json", JSON.stringify(pkg, null, 2));
+        run: |
+            jq '.name = "@6x68/vm-ui"' package.json > /tmp/package.json && mv /tmp/package.json package.json
 
       - name: Publish (GitHub)
         run: bunx npm publish --registry=https://npm.pkg.github.com/ --loglevel info
