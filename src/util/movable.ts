@@ -48,7 +48,7 @@ export class Movable {
 	 * Merges {@linkcode Movable.defaultOptions the default options} with {@linkcode options}.
 	 * @param options additional options.
 	 */
-	private setOptions(options: Partial<MovableOptions>) {
+	setOptions(options: Partial<MovableOptions>) {
 		this.options = {
 			...Movable.defaultOptions,
 			...options,
