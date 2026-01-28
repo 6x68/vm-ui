@@ -4,13 +4,22 @@ export interface MovableOrigin {
 }
 
 export interface MovableOptions {
+	/**
+	 * Where this panel will originate from.
+	 * @default { x: "auto", y: "auto" }
+	 */
 	origin: MovableOrigin;
+	/** A callback which is called on the `pointerDown` event */
 	onMoved?: () => void;
 	/**
-	 *
-	 * @param e
+	 * @param e the pointer event
+	 * @returns If we should start dragging the object.
 	 */
 	canDrag?(e: PointerEvent): boolean;
+	/**
+	 * Threshold for actually moving the object, checks if `deltaX + deltaY < dragThreshold`
+	 * @default 5
+	 */
 	dragThreshold?: number;
 }
 
@@ -35,7 +44,11 @@ export class Movable {
 		this.el.style.touchAction = "none";
 	}
 
-	setOptions(options: Partial<MovableOptions>) {
+	/**
+	 * Merges {@linkcode Movable.defaultOptions the default options} with {@linkcode options}.
+	 * @param options additional options.
+	 */
+	private setOptions(options: Partial<MovableOptions>) {
 		this.options = {
 			...Movable.defaultOptions,
 			...options,
@@ -55,6 +68,7 @@ export class Movable {
 		document.addEventListener("pointermove", this.onPointerMove);
 		document.addEventListener("pointerup", this.onPointerUp);
 		document.addEventListener("pointercancel", this.onPointerUp);
+		this.options.onMoved?.();
 	};
 
 	private onPointerMove = (e: PointerEvent) => {
@@ -107,8 +121,8 @@ export class Movable {
 
 	disable() {
 		this.dragging = undefined;
-		this.el.removeEventListener("mousedown", this.onPointerDown);
-		document.removeEventListener("mousemove", this.onPointerMove);
-		document.removeEventListener("mouseup", this.onPointerUp);
+		this.el.removeEventListener("pointerdown", this.onPointerDown);
+		document.removeEventListener("pointermove", this.onPointerMove);
+		document.removeEventListener("pointerup", this.onPointerUp);
 	}
 }
