@@ -1,4 +1,11 @@
-# @violentmonkey/ui
+# @wq2/ui
+
+> [!WARNING]
+>
+> I broke like 2 things and don't maintain this anymore, since my one reason for making this (Vape Rewrite) has been moved off of using this project.
+> The main reason is due to this not using a closed shadow root, which was the initial reason for this fork.
+> I tried a *lot* to fix it, but every way kept garbage collecting the reference to the shadow root, causing it to not work since it's a closed shadow root.
+> Please don't use this.
 
 [![NPM](https://img.shields.io/npm/v/@violentmonkey/ui.svg)](https://npm.im/@violentmonkey/ui)
 ![License](https://img.shields.io/npm/l/@violentmonkey/ui.svg)
